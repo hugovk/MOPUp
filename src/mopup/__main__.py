@@ -24,13 +24,25 @@ from mopup import main as libmain
     help="do a minor version upgrade rather than the default (a micro-version)",
 )
 @click.option(
+    "--python",
+    help="update this Python version rather than the current interpreter",
+)
+@click.option(
     "--dry-run",
     default=False,
     help="don't actually download or install anything even if we're not up to date",
 )
-def main(interactive: bool, force: bool, minor: bool, dry_run: bool) -> None:
+def main(
+    interactive: bool, force: bool, minor: bool, python: str, dry_run: bool
+) -> None:
     """MOPUp."""
-    libmain(interactive=interactive, force=force, minor_upgrade=minor, dry_run=dry_run)
+    libmain(
+        interactive=interactive,
+        force=force,
+        minor_upgrade=minor,
+        python=python,
+        dry_run=dry_run,
+    )
 
 
 if __name__ == "__main__":

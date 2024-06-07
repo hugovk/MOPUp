@@ -30,13 +30,23 @@ def alllinksin(
             yield match, u.click(a.attrib["href"])
 
 
-def main(interactive: bool, force: bool, minor_upgrade: bool, dry_run: bool) -> None:
+def main(
+    interactive: bool, force: bool, minor_upgrade: bool, python: str, dry_run: bool
+) -> None:
     """Do an update."""
     this_mac_ver = tuple(map(int, mac_ver()[0].split(".")[:2]))
     ver = compile_re(r"(\d+)\.(\d+).(\d+)/")
     macpkg = compile_re("python-(.+)-macosx?(.*).pkg")
 
-    thismajor, thisminor, thismicro, level, serial = version_info
+    if python:
+        cmd = f"python{python} -c 'import sys; print(tuple(sys.version_info))'"
+        import subprocess
+
+        info = subprocess.check_output(cmd, shell=True).decode("utf-8")
+        info = eval(info)
+        thismajor, thisminor, thismicro, level, serial = info
+    else:
+        thismajor, thisminor, thismicro, level, serial = version_info
 
     thispkgver = Version(
         f"{thismajor}.{thisminor}.{thismicro}"
